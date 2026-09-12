@@ -5,6 +5,7 @@ import 'features/calendar/controllers/calendar_controller.dart';
 import 'features/calendar/screens/calendar_screen.dart';
 import 'services/notification_service.dart';
 
+
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
   await NotificationService.init();

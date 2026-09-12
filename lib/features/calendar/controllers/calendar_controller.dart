@@ -3,7 +3,7 @@ import 'package:moj_kalendar/services/notification_service.dart';
 import 'package:moj_kalendar/services/widget_service.dart';
 import '../../../core/database/hive_service.dart';
 import '../../../core/models/event_model.dart';
-import 'package:home_widget/home_widget.dart';
+
 
 class CalendarController extends ChangeNotifier {
   final HiveService _db = HiveService();
@@ -32,7 +32,7 @@ class CalendarController extends ChangeNotifier {
     );
 
     await _updateWidget();
-    await updateHomeWidget();
+    
   }
 
   // ✏️ Ažuriranje postojećeg eventa
@@ -54,7 +54,7 @@ class CalendarController extends ChangeNotifier {
     );
 
     await _updateWidget();
-    await updateHomeWidget();
+    
   }
 
   // 🗑️ Brisanje eventa
@@ -68,7 +68,7 @@ class CalendarController extends ChangeNotifier {
 
     // 3. Osvježi widget
     await _updateWidget();
-    await updateHomeWidget();
+  
   }
 
   // 📅 Postavljanje selektiranog dana
@@ -85,37 +85,9 @@ class CalendarController extends ChangeNotifier {
         e.dateTime.day == day.day).toList();
   }
 
-  // 🛠️ Privatna pomoćna funkcija za ažuriranje Home Screen Widgeta
-  Future<void> _updateWidget() async {
-    await WidgetService.updateList(
-      events.map((e) =>
-        "${e.title} ${e.dateTime.hour.toString().padLeft(2, '0')}:${e.dateTime.minute.toString().padLeft(2, '0')}"
-      ).toList(),
-    );
-  }
-
-  Future<void> updateHomeWidget() async {
-  final today = DateTime.now();
-
-  final monthEvents = events.where((e) =>
-    e.dateTime.year == today.year &&
-    e.dateTime.month == today.month
-  ).toList();
-
-  final data = monthEvents.map((e) {
-    return "${e.dateTime.year},${e.dateTime.month},${e.dateTime.day}|"
-           "${e.dateTime.hour}:${e.dateTime.minute}|"
-           "${e.title}|"
-           "${e.colorValue ?? 0xFF2196F3}";
-  }).toList();
-
-  await HomeWidget.saveWidgetData('events', data.join(';;'));
-
-  await HomeWidget.saveWidgetData('month', "${today.year},${today.month}");
-
-  await HomeWidget.updateWidget(
-    name: 'CalendarWidget',
-    androidName: 'CalendarWidget',
-  );
+ Future<void> _updateWidget() async {
+  await WidgetService.updateCalendarWidget(events);
 }
+
+ 
 }

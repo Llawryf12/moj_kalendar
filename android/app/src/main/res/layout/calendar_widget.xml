@@ -1,25 +1,45 @@
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:orientation="vertical"
-    android:padding="12dp"
-    android:background="#FFFFFF"
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools" 
     android:layout_width="match_parent"
-    android:layout_height="match_parent">
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    android:padding="10dp"
+    android:background="#FFFFFF">
 
+    <!-- Dodali smo xmlns:tools gore i zamijenili android:text s tools:text kako mjesec ne bi bio hardkodiran u aplikaciji -->
     <TextView
         android:id="@+id/monthTitle"
-        android:text="Month"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        tools:text="Rujan 2026" 
+        android:textSize="20sp"
         android:textStyle="bold"
-        android:textSize="18sp"
-        android:paddingBottom="8dp"/>
+        android:textColor="#222222"
+        android:gravity="center"
+        android:paddingBottom="6dp" />
 
     <TextView
         android:id="@+id/calendarGrid"
-        android:text="calendar"
-        android:textSize="12sp"
-        android:paddingBottom="8dp"/>
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:textSize="15sp"
+        android:textColor="#222222"
+        android:fontFamily="monospace"
+        android:gravity="center_horizontal"
+        android:includeFontPadding="false"
+        android:lineSpacingExtra="4dp" />
 
+    <!-- Uklonjen je atribut gravity kako bi tekst ponovno bio prirodno poravnat ulijevo -->
     <TextView
         android:id="@+id/agenda"
-        android:text="agenda"
-        android:textSize="14sp"/>
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="8dp"
+        android:textSize="13sp"
+        android:textColor="#333333"
+        android:maxLines="4"
+        android:ellipsize="end" />
+
 </LinearLayout>
