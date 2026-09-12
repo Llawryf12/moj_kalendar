@@ -5,41 +5,44 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical"
-    android:padding="10dp"
+    android:paddingStart="4dp"
+    android:paddingEnd="4dp"
+    android:paddingTop="8dp"
+    android:paddingBottom="8dp"
     android:background="#FFFFFF">
 
-    <!-- Dodali smo xmlns:tools gore i zamijenili android:text s tools:text kako mjesec ne bi bio hardkodiran u aplikaciji -->
     <TextView
         android:id="@+id/monthTitle"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         tools:text="Rujan 2026" 
-        android:textSize="20sp"
+        android:textSize="18sp"
         android:textStyle="bold"
         android:textColor="#222222"
         android:gravity="center"
-        android:paddingBottom="6dp" />
+        android:paddingBottom="8dp" />
 
     <TextView
         android:id="@+id/calendarGrid"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:textSize="15sp"
+        android:textSize="14sp"
         android:textColor="#222222"
         android:fontFamily="monospace"
         android:gravity="center_horizontal"
         android:includeFontPadding="false"
-        android:lineSpacingExtra="4dp" />
+        android:lineSpacingExtra="8dp" /> <!-- Veći razmak između redova dana -->
 
-    <!-- Uklonjen je atribut gravity kako bi tekst ponovno bio prirodno poravnat ulijevo -->
     <TextView
         android:id="@+id/agenda"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginTop="8dp"
-        android:textSize="13sp"
+        android:layout_marginTop="10dp"
+        android:paddingStart="6dp"
+        android:paddingEnd="6dp"
+        android:textSize="12sp"
         android:textColor="#333333"
-        android:maxLines="4"
+        android:maxLines="3"
         android:ellipsize="end" />
 
 </LinearLayout>

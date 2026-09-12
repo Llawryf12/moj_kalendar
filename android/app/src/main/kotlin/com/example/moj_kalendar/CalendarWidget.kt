@@ -31,7 +31,6 @@ class CalendarWidget : AppWidgetProvider() {
 
             val calendar = Calendar.getInstance()
             
-            // Spremamo današnji datum za usporedbu
             val todayYear = calendar.get(Calendar.YEAR)
             val todayMonth = calendar.get(Calendar.MONTH)
             val todayDay = calendar.get(Calendar.DAY_OF_MONTH)
@@ -46,52 +45,56 @@ class CalendarWidget : AppWidgetProvider() {
 
             views.setTextViewText(R.id.monthTitle, "${monthNames[month]} $year")
 
-            // Prvi dan mjeseca
             calendar.set(Calendar.DAY_OF_MONTH, 1)
 
             val daysInMonth = calendar.getActualMaximum(Calendar.DAY_OF_MONTH)
             val firstDay = calendar.get(Calendar.DAY_OF_WEEK)
 
-            // Ponedjeljak = prvi dan tjedna
             val offset = when (firstDay) {
                 Calendar.SUNDAY -> 6
                 else -> firstDay - Calendar.MONDAY
             }
 
-            // Koristimo SpannableStringBuilder za stiliziranje teksta
             val calendarText = SpannableStringBuilder()
 
-            // Zaglavlje
-            calendarText.append("   P   U   S   Č   P   S   N\n")
+            // Zaglavlje (2 razmaka + slovo = 3 znaka po stupcu)
+            calendarText.append("  P  U  S  Č  P  S  N\n")
 
-            // Prazna mjesta prije prvog dana
+            // Prazna mjesta prije prvog dana (3 razmaka)
             repeat(offset) {
-                calendarText.append("    ")
+                calendarText.append("   ")
             }
 
-            // Je li mjesec koji prikazujemo trenutni mjesec?
             val isCurrentMonth = (year == todayYear && month == todayMonth)
 
-            // Dani
+            // Dani (formatirani na točno 3 mjesta: %3d)
             for (day in 1..daysInMonth) {
                 val start = calendarText.length
-                calendarText.append(String.format("%4d", day))
+                calendarText.append(String.format("%3d", day))
                 val end = calendarText.length
 
-                // Ako je to današnji dan, bojamo ga u crveno i stavljamo bold
                 if (isCurrentMonth && day == todayDay) {
                     calendarText.setSpan(
                         StyleSpan(Typeface.BOLD),
                         start, end, Spannable.SPAN_EXCLUSIVE_EXCLUSIVE
                     )
                     calendarText.setSpan(
-                        ForegroundColorSpan(Color.parseColor("#E53935")), // Crvena boja
+                        ForegroundColorSpan(Color.parseColor("#E53935")),
                         start, end, Spannable.SPAN_EXCLUSIVE_EXCLUSIVE
                     )
                 }
 
                 if ((offset + day) % 7 == 0) {
                     calendarText.append("\n")
+                }
+            }
+
+            // 🛠️ DOPUNA: Dodajemo razmake za preostale dane u zadnjem redu 
+            // kako bi zadnji redak imao jednaku širinu kao i ostali
+            val remainingInLastWeek = (offset + daysInMonth) % 7
+            if (remainingInLastWeek != 0) {
+                repeat(7 - remainingInLastWeek) {
+                    calendarText.append("   ")
                 }
             }
 
