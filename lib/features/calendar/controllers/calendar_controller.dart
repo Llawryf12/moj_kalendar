@@ -4,7 +4,6 @@ import 'package:moj_kalendar/services/widget_service.dart';
 import '../../../core/database/hive_service.dart';
 import '../../../core/models/event_model.dart';
 
-
 class CalendarController extends ChangeNotifier {
   final HiveService _db = HiveService();
 
@@ -28,17 +27,15 @@ class CalendarController extends ChangeNotifier {
       title: event.title,
       body: event.description,
       eventDate: event.dateTime,
-      colorValue: event.colorValue, // Proslijedi boju ako je definirana
     );
 
     await _updateWidget();
-    
   }
 
   // ✏️ Ažuriranje postojećeg eventa
   Future<void> updateEvent(Event event) async {
-    // 1. Obriši staru notifikaciju (koristeći hashCode od String ID-a)
-    await NotificationService.cancelNotification(event.id.hashCode);
+    // 1. Obriši staru notifikaciju (šaljemo String ID)
+    await NotificationService.cancelNotification(event.id);
 
     // 2. Spremi izmjene u Hive bazu
     await _db.saveEvent(event);
@@ -50,17 +47,15 @@ class CalendarController extends ChangeNotifier {
       title: event.title,
       body: event.description,
       eventDate: event.dateTime,
-      colorValue: event.colorValue, // Proslijedi boju ako je definirana
     );
 
     await _updateWidget();
-    
   }
 
   // 🗑️ Brisanje eventa
   Future<void> deleteEvent(String id) async {
-    // 1. Cancel notification pomoću hashCode-a ID-a
-    await NotificationService.cancelNotification(id.hashCode);
+    // 1. Cancel notification pomoću String ID-a
+    await NotificationService.cancelNotification(id);
 
     // 2. Brisanje iz baze i ponovno učitavanje liste
     await _db.deleteEvent(id);
@@ -68,7 +63,6 @@ class CalendarController extends ChangeNotifier {
 
     // 3. Osvježi widget
     await _updateWidget();
-  
   }
 
   // 📅 Postavljanje selektiranog dana
@@ -85,9 +79,7 @@ class CalendarController extends ChangeNotifier {
         e.dateTime.day == day.day).toList();
   }
 
- Future<void> _updateWidget() async {
-  await WidgetService.updateCalendarWidget(events);
-}
-
- 
+  Future<void> _updateWidget() async {
+    await WidgetService.updateCalendarWidget(events);
+  }
 }
