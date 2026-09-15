@@ -103,34 +103,34 @@ class CalendarWidget : AppWidgetProvider() {
             // -----------------------------
             // DOGAĐAJI
             // -----------------------------
-            val agenda = StringBuilder()
+val agenda = StringBuilder()
 
-            if (rawEvents.isNotEmpty()) {
-                val events = rawEvents.split(";;")
-                for (event in events.take(4)) {
-                    val parts = event.split("|")
-                    if (parts.size >= 3) {
-                        val date = parts[0]
-                        val time = parts[1]
-                        val title = parts[2]
-                        val dateParts = date.split(",")
+val monthlyEvents = rawEvents
+    .split(";;")
+    .mapNotNull { event ->
+        val parts = event.split("|")
+        if (parts.size < 3) return@mapNotNull null
 
-                        if (dateParts.size == 3) {
-                            val eventYear = dateParts[0].toIntOrNull()
-                            val eventMonth = dateParts[1].toIntOrNull()
-                            val eventDay = dateParts[2].toIntOrNull()
+        val dateParts = parts[0].split(",")
+        if (dateParts.size != 3) return@mapNotNull null
 
-                            if (eventYear == year && eventMonth == month + 1) {
-                                agenda.append("• $eventDay. $time  $title\n")
-                            }
-                        }
-                    }
-                }
-            }
+        val eventYear = dateParts[0].toIntOrNull()
+        val eventMonth = dateParts[1].toIntOrNull()
+        val eventDay = dateParts[2].toIntOrNull()
 
-            if (agenda.isEmpty()) {
-                agenda.append("Nema događaja ovaj mjesec")
-            }
+        if (eventYear == year && eventMonth == month + 1) {
+            Triple(eventDay, parts[1], parts[2]) // day, time, title
+        } else null
+    }
+
+if (monthlyEvents.isEmpty()) {
+    agenda.append("Nema događaja ovaj mjesec")
+} else {
+    monthlyEvents.forEach { (day, time, title) ->
+        agenda.append("• $day. $time  $title\n")
+    }
+}
+
 
             views.setTextViewText(R.id.agenda, agenda.toString())
             appWidgetManager.updateAppWidget(appWidgetId, views)
